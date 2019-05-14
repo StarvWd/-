@@ -33,7 +33,7 @@ def getHttpHeader(skt):
         if len(r) == 2:
             rst[r[0]] = r[1]
         else:
-            r = line.split(r'/')
+            r = line.split(r' ')
             rst["method"] = r[0]
             rst['uri'] = r[1]
             rst['version'] = r[2]

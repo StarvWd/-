@@ -1,3 +1,18 @@
+#将具体的参数放在一个类中形成配置文件
+class ServerContent:
+    ip = '127.0.0.1'
+    port = 9999
+
+    head_protocal = "HTTP/1.1 "
+    head_code_200 = "200 "
+    head_status_OK = "OK"
+
+    head_content_length = "Content-Length: "
+    head_content_type = "Content-Type: "
+    content_type_html = "text/html"
+
+    blank_line = ""
+
 import socket
 import threading
 '''
@@ -7,7 +22,7 @@ import threading
 '''
 
 class Webserver():
-    def __init__(self, ip="127.0.0.1", port=7483):
+    def __init__(self, ip=ServerContent.ip, port = ServerContent.port):
         self.ip = ip
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,10 +52,10 @@ class SocketHandle:
         self.sendRsp()      #返回内容
 
     def sendRsp(self):
-        rsp_1 = "HTTP/1.1 200 OK\r\n"
+        rsp_1 = "{0} {1} {2}\r\n".format(ServerContent.head_protocal,ServerContent.head_code_200,ServerContent.head_status_OK)
         rsp_2 = "Date:  2019.5.13\r\n"
         msg = "hello man"
-        rsp_3 = "Content-Length: {0}\r\n".format(len(msg))
+        rsp_3 = "{1}: {0}\r\n".format(len(msg),ServerContent.head_content_length)
         rsp_4 = "\r\n"
         rsp_content = msg
         rsp = rsp_1 + rsp_2 + rsp_3 + rsp_4 + rsp_content
