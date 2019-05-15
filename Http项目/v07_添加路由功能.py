@@ -1,7 +1,8 @@
 
 '''
-修改sendRst函数，使其返回静态页面
-页面在webapp文件夹中
+传输的html可以以rb方式打开
+直接传输
+绕开编码解码
 '''
 
 
@@ -66,6 +67,7 @@ class SocketHandle:
         if uri == r'/favicon.ico':
             self.sendStaticRsp(r'.\webapp\fav.jfif')
             return None
+        self.sendRsp(r'.\webapp\404.html')
 
     def sendStaticRsp(self, fp):
         with open(fp, mode='rb') as f:
@@ -73,8 +75,11 @@ class SocketHandle:
             self.sendRspAll(ico)
 
     def sendRsp(self, fp):
-        with open(fp, mode='r', encoding='utf-8') as f:
+        with open(fp, mode='rb') as f:
             data = f.read()
+            print(type(data))
+            print(len(data))
+            print(data)
             self.sendRspAll(data)
 
     def sendRspAll(self, msg):
@@ -105,8 +110,6 @@ class SocketHandle:
     def headHandler(self):
         tmpHead = self.__getAllLine()
         for line in tmpHead:
-            #print(line)
-            #print(type(line))
             if r": " in line:
                 infos = line.split(r': ')
                 self.headInfo[infos[0]] = infos[1]
